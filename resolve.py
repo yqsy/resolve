@@ -76,7 +76,6 @@ if __name__ == '__main__':
             out_arrays.append(copy.copy(current_dict))
 
         for idx, one_info in enumerate(out_arrays):
-
             out_put_array = []
             for field_structor in stand_structure:
                 column_name = field_structor['字段名']
