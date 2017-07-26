@@ -64,7 +64,7 @@ if __name__ == '__main__':
 
         out_arrays = []
 
-        for idx, info in enumerate(file_infos):
+        for info in file_infos:
             current_info = info
             current_dict = {}
 
@@ -75,10 +75,16 @@ if __name__ == '__main__':
 
             out_arrays.append(copy.copy(current_dict))
 
-            print('{} {}'.format(idx + 1, current_dict))
+        for idx, one_info in enumerate(out_arrays):
+
+            out_put_array = []
+            for field_structor in stand_structure:
+                column_name = field_structor['字段名']
+                out_put_array.append('{}:{}'.format(column_name, one_info[column_name]))
+
+            print('[{}] {}'.format(idx + 1, ','.join(out_put_array)))
 
         columns = []
-
         for field_structor in stand_structure:
             columns.append(field_structor['字段名'])
 
