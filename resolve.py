@@ -1,8 +1,88 @@
 import csv
 
+import copy
+
+
+def get_field_len(length_in_ch):
+    """
+    一般是数字,还有16(两位小数)这种情况,要转换成数字
+    """
+    if '(' not in length_in_ch:
+        return int(length_in_ch)
+
+    idx = length_in_ch.find('(')
+    length = length_in_ch[:idx]
+    return int(length)
+
+
 if __name__ == '__main__':
+
+    stand_structure = []
     with open('03_example.csv', encoding='utf-8-sig') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
-            print(row)
+            # 每一个字段的各种属性
+            stand_structure.append(row)
 
+    with open('OFD_303_47_20170519_03.TXT', encoding='utf-8') as f:
+        lines = f.read().splitlines()
+
+        file_field_nums = int(lines[9])
+        if file_field_nums != len(stand_structure):
+            print('字段数量不相等,文件标准字段数:{} 实际数量:{}'.format(
+                len(stand_structure), file_field_nums))
+            exit(-1)
+
+        file_fields = lines[10:10 + file_field_nums]
+
+        if len(file_fields) != file_field_nums:
+            print('文件字段数量为:{},实际字段不满足该数量:{},字段:{}'.format(
+                file_field_nums, len(file_fields), file_fields))
+            exit(-1)
+
+        for field, stand_field in zip(file_fields, stand_structure):
+            if field != stand_field['字段名']:
+
+                if field.lower() == stand_field['字段名'].lower():
+                    print('[warning]字段大小写不同,文件字段:{} 标准字段:{}'.format(
+                        field, stand_field['字段名']
+                    ))
+                else:
+                    print('字段不同,文件字段:{} 标准字段:{}'.format(
+                        field, stand_field['字段名']
+                    ))
+                    exit(-1)
+
+        file_info_nums = int(lines[10 + file_field_nums])
+
+        if file_info_nums == 0:
+            print('字段数量为0,不往下解析了')
+            exit(0)
+
+        file_info_begin_idx = 10 + file_field_nums + 1
+        file_infos = lines[file_info_begin_idx: file_info_begin_idx + file_info_nums]
+
+        out_arrays = []
+
+        for idx, info in enumerate(file_infos):
+            current_info = info
+            current_dict = {}
+
+            for field_structor in stand_structure:
+                length = get_field_len(field_structor['长度'])
+                current_dict[field_structor['字段名']] = current_info[:length]
+                current_info = current_info[length:]
+
+            out_arrays.append(copy.copy(current_dict))
+
+            print('{} {}'.format(idx + 1, current_dict))
+
+        columns = []
+
+        for field_structor in stand_structure:
+            columns.append(field_structor['字段名'])
+
+        with open('out.csv', 'w') as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=columns)
+            writer.writeheader()
+            writer.writerows(out_arrays)
