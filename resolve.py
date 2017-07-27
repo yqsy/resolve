@@ -1,6 +1,15 @@
 import csv
 
 import copy
+import argparse
+
+PARSER = argparse.ArgumentParser()
+
+PARSER.add_argument('-c', '--csv', action='store', dest='csvfile',
+                    default=None, help='文件模板csv文件')
+
+PARSER.add_argument('-t', '--txt', action='store', dest='txtfile',
+                    default=None, help='基金文件')
 
 
 def get_field_len(length_in_ch):
@@ -16,15 +25,26 @@ def get_field_len(length_in_ch):
 
 
 if __name__ == '__main__':
+    OPTIONS = PARSER.parse_args()
+
+    if not OPTIONS.csvfile:
+        PARSER.print_help()
+        print('请输出-c')
+        exit(-1)
+
+    if not OPTIONS.txtfile:
+        PARSER.print_help()
+        print('请输出-t')
+        exit(-1)
 
     stand_structure = []
-    with open('03_example.csv', encoding='utf-8-sig') as csvfile:
+    with open(OPTIONS.csvfile, encoding='utf-8-sig') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
             # 每一个字段的各种属性
             stand_structure.append(row)
 
-    with open('OFD_303_47_20170519_03.TXT', encoding='utf-8') as f:
+    with open(OPTIONS.txtfile, encoding='utf-8') as f:
         lines = f.read().splitlines()
 
         file_field_nums = int(lines[9])
