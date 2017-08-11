@@ -1,0 +1,35 @@
+﻿ID,字段名 ,类型 ,长度 ,描述 
+1, FundCode ,C ,6,基金代码 
+2, TAAccountID ,C ,12,投资人基金账号 
+3, TransactionAccountID ,A ,17,投资人基金交易账号 
+4, BusinessCode ,A ,3,业务代码 
+5, ContractType ,C ,1,合同类型 
+6, SerialNo ,C ,26,流水号 
+7, Version ,C ,3,版本号 
+8, SignType ,C ,1,签署类型 
+9, DistributorCode ,C ,9,销售人代码 
+10, InvestorName ,C ,120,投资人户名 
+11, IndividualOrInstitution ,A ,1,个人/机构标志 
+12, CertificateType ,C ,1,个人证件类型及机构证件类型 
+13, CertificateNo ,C ,30,投资人证件号码 
+14, TransactionDate ,A ,8,交易发生日期 
+15, TransactionTime ,A ,6,交易发生时间 
+16, AcceptMethod ,C ,1,受理方式 
+17, AcceptPlace ,C ,40,受理地点 
+18, NetNo ,C ,9,操作(清算)网点编号 
+19, Notes ,C ,64,附加信息 
+20, SignRiskNotice ,C ,1,已签署风险揭示书 
+21, RiskMatching ,C ,1,风险承受能力匹配情况 
+22, ClientRiskRate ,C ,1,客户风险等级 
+23, AlternationDate ,A ,8,最后更新日 
+24, CardNo ,C ,32,客户银行卡号或券商端资金账号 
+25, TelNo ,C ,22,投资人电话号码 
+26, MobileTelNo ,C ,24,投资人手机号码 
+27, EmailAddress ,C ,40,投资人 E-MAIL 地\n址 
+28, PostCode ,A ,6,投资人邮政编码 
+29, Address ,C ,120,通讯地址 
+30, ReservedField1 ,C ,20,预留字段 1 
+31, ReservedField2 ,C ,20,预留字段 2 
+32, ReservedField3 ,C ,30,预留字段 3 
+33, ReservedField4 ,N ,16(2位小数),预留字段 4 
+34, ReservedField5 ,N ,16(2位小数),预留字段 5 
