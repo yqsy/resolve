@@ -7,12 +7,12 @@ from collections import OrderedDict
 
 PARSER = argparse.ArgumentParser()
 
-PARSER.add_argument('csvfile', metavar='csvfile', nargs=1, help='which csv file to be converted'
-                                                                'to sql')
+PARSER.add_argument('csvfile', nargs=1, help='which csv file to be converted'
+                                             'to sql')
 
-PARSER.add_argument('--tacode', dest='tacode', action='store', default='000')
+PARSER.add_argument('--tacode', dest='tacode', action='store', required=True)
 
-PARSER.add_argument('--filetype', dest='filetype', action='store', default='01')
+PARSER.add_argument('--filetype', dest='filetype', action='store', required=True)
 
 
 def get_type(field_type):
@@ -72,11 +72,7 @@ def add_generator():
         yield i
 
 
-def main():
-    options = PARSER.parse_args()
-
-    filename = options.csvfile[0]
-
+def sql_generator(filename, tacode, filetype):
     add_func = add_generator()
 
     with open(filename, encoding='utf-8-sig') as csvfile:
@@ -91,18 +87,32 @@ def main():
                                             key=lambda item: reader.fieldnames.index(item[0])))
 
             insert_str = '''INSERT INTO dbo.TFILEFIELD (FTACODE, FFLTYPE, FFINAME, FFITYPE, FFILENG, FFISUBL, FFIALGN, FFIORDR, FFIIDEN, FFIDNEED, FFDEFAULT)
-VALUES ('{FTACODE}', '{FFLTYPE}', '{FFINAME}', {FFITYPE}, {FFILENG}, {FFISUBL}, {FFIALGN}, {FFIORDR}, '{FFIIDEN}', 'Y', NULL)
-GO
-'''
-            for key,value in sorted_row.items():
+    VALUES ('{FTACODE}', '{FFLTYPE}', '{FFINAME}', {FFITYPE}, {FFILENG}, {FFISUBL}, {FFIALGN}, {FFIORDR}, '{FFIIDEN}', 'Y', NULL)
+    GO
+    '''
+            for key, value in sorted_row.items():
                 sorted_row[key] = value.strip()
 
-            print(insert_str.format(FTACODE=options.tacode, FFLTYPE=options.filetype,
+            yield insert_str.format(FTACODE=tacode, FFLTYPE=filetype,
                                     FFINAME=sorted_row['字段名'], FFITYPE=get_type(sorted_row['类型']),
                                     FFILENG=get_integer_length(sorted_row['长度']),
                                     FFISUBL=get_decimal_digit(sorted_row['长度']),
                                     FFIALGN=get_alignment(sorted_row['类型']), FFIORDR=next(add_func),
-                                    FFIIDEN=sorted_row['ID']))
+                                    FFIIDEN=sorted_row['ID'])
+
+
+def main():
+    options = PARSER.parse_args()
+    filename = options.csvfile[0]
+
+    sql_func = sql_generator(filename, options.tacode, options.filetype)
+
+    out_file_name = '{}-{}-TFILEFIELD.sql'.format(options.tacode, options.filetype)
+    with open(out_file_name, 'w') as out_file:
+        for sql_str in sql_func:
+            out_file.write(sql_str)
+
+    print(out_file_name, ' created')
 
 
 if __name__ == '__main__':
