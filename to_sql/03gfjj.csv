@@ -65,7 +65,7 @@
 330,BatchNumOfPeSubs,N,16(两位小数)
 345,CapitalMode,C,2
 346,DetailCapticalMode,C,2
-347,BackenloadDiscount,N,5(4位小数)
+347,BackenloadDiscount,N,5(四位小数)
 348,CombineNum,C,6
 307,FutureSubscribeDate,A,8
 164,TradingMethod,C,8
