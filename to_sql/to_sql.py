@@ -87,9 +87,10 @@ def sql_generator(filename, tacode, filetype):
                                             key=lambda item: reader.fieldnames.index(item[0])))
 
             insert_str = '''INSERT INTO dbo.TFILEFIELD (FTACODE, FFLTYPE, FFINAME, FFITYPE, FFILENG, FFISUBL, FFIALGN, FFIORDR, FFIIDEN, FFIDNEED, FFDEFAULT)
-    VALUES ('{FTACODE}', '{FFLTYPE}', '{FFINAME}', {FFITYPE}, {FFILENG}, {FFISUBL}, {FFIALGN}, {FFIORDR}, '{FFIIDEN}', 'Y', NULL)
-    GO
-    '''
+VALUES ('{FTACODE}', '{FFLTYPE}', '{FFINAME}', {FFITYPE}, {FFILENG}, {FFISUBL}, {FFIALGN}, {FFIORDR}, '{FFIIDEN}', 'Y', NULL)
+GO
+
+'''
             for key, value in sorted_row.items():
                 sorted_row[key] = value.strip()
 
