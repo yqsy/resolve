@@ -94,6 +94,8 @@ def main():
 VALUES ('{FTACODE}', '{FFLTYPE}', '{FFINAME}', {FFITYPE}, {FFILENG}, {FFISUBL}, {FFIALGN}, {FFIORDR}, '{FFIIDEN}', 'Y', NULL)
 GO
 '''
+            for key,value in sorted_row.items():
+                sorted_row[key] = value.strip()
 
             print(insert_str.format(FTACODE=options.tacode, FFLTYPE=options.filetype,
                                     FFINAME=sorted_row['字段名'], FFITYPE=get_type(sorted_row['类型']),
