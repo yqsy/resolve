@@ -6,10 +6,10 @@ import argparse
 PARSER = argparse.ArgumentParser()
 
 PARSER.add_argument('-c', '--csv', action='store', dest='csvfile',
-                    default=None, help='文件模板csv文件')
+                    required=True, help='文件模板csv文件')
 
 PARSER.add_argument('-t', '--txt', action='store', dest='txtfile',
-                    default=None, help='基金文件')
+                    required=True, help='基金文件')
 
 
 def get_field_len(length_in_ch):
@@ -26,16 +26,6 @@ def get_field_len(length_in_ch):
 
 if __name__ == '__main__':
     OPTIONS = PARSER.parse_args()
-
-    if not OPTIONS.csvfile:
-        PARSER.print_help()
-        print('请输出-c')
-        exit(-1)
-
-    if not OPTIONS.txtfile:
-        PARSER.print_help()
-        print('请输出-t')
-        exit(-1)
 
     stand_structure = []
     with open(OPTIONS.csvfile, encoding='utf-8-sig') as csvfile:
