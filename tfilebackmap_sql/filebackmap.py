@@ -40,7 +40,7 @@ def main():
 
     sql_func = sql_generator(filename, options.tacode, options.filetype)
 
-    out_file_name = '{}-{}-TFILEFIELD.sql'.format(options.tacode, options.filetype)
+    out_file_name = '{}-{}-TFILEBACKMAP.sql'.format(options.tacode, options.filetype)
     with open(out_file_name, 'w') as out_file:
         for sql_str in sql_func:
             out_file.write(sql_str)
